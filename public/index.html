@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Hello man</h1>
+	<script>
+		if('geolocation' in navigator) {
+			console.log('geo est!');
+			navigator.geolocation.getCurrentPosition(async position => {
+				const lat = position.coords.latitude;
+				const lon = position.coords.longitude;
+				const mood = document.getElementById('mood').textContent;
+
+				document.getElementById('latitude').textContent = lat;
+				document.getElementById('longitude').textContent = lon;
+				console.log(position);
+
+				const data = {mood, lat, lon};
+				const options = {
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify(data)
+				};
+				const res = await fetch('/api', options);
+				const json = await res.json();
+				console.log(json);
+			});
+		} else {
+			console.log('geo net(((');
+		}
+	</script>
+
+	<h1>Coords</h1>
+	<p>latitude : <span id="latitude"></span></p>
+	<p>longitude : <span id="longitude"></span></p>
+	<input type="text" id="mood">
+	<button>ok</button>
+</body>
+</html>
